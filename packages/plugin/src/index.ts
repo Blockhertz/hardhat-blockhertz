@@ -5,20 +5,17 @@ import type { HardhatPlugin } from "hardhat/types/plugins";
 import "./type-extensions.js";
 
 const plugin: HardhatPlugin = {
-  id: "hardhat-my-plugin",
-  hookHandlers: {
-    config: () => import("./hooks/config.js"),
-    network: () => import("./hooks/network.js"),
-  },
+  id: "hardhat-blockhertz",
+  hookHandlers: {},
   tasks: [
-    task("my-task", "Prints a greeting.")
+    task("blockhertz-audit", "Audit smart contracts using Blockhertz AI Security Scanner")
       .addOption({
-        name: "who",
-        description: "Who is receiving the greeting.",
+        name: "contract",
+        description: "Path to specific contract file (optional)",
         type: ArgumentType.STRING,
-        defaultValue: "Hardhat",
+        defaultValue: "",
       })
-      .setAction(() => import("./tasks/my-task.js"))
+      .setAction(() => import("./tasks/audit.js"))
       .build(),
   ],
 };

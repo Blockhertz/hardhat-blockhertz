@@ -1,57 +1,66 @@
-# `hardhat-my-plugin`
+# hardhat-blockhertz
 
-This is an example plugin that adds a task that prints a greeting.
+AI-powered smart contract security auditor for Hardhat — powered by [Blockhertz](https://blockhertz.com)
+
+[![npm](https://img.shields.io/npm/v/hardhat-blockhertz)](https://www.npmjs.com/package/hardhat-blockhertz)
 
 ## Installation
 
-To install this plugin, run the following command:
-
 ```bash
-npm install --save-dev hardhat-my-plugin
+npm install hardhat-blockhertz
 ```
 
-In your `hardhat.config.ts` file, import the plugin and add it to the `plugins` array:
+## Setup
 
-```ts
-import { defineConfig } from "hardhat/config";
-import myPlugin from "hardhat-my-plugin";
+```typescript
+import hardhatBlockhertz from "hardhat-blockhertz";
 
-export default defineConfig({
-  plugins: [myPlugin],
-});
+const config = {
+  plugins: [hardhatBlockhertz],
+  blockhertz: {
+    apiKey: process.env.BLOCKHERTZ_API_KEY,
+    failOn: "high",
+  }
+};
+
+export default config;
 ```
+
+## Get Free API Key
+
+https://blockhertz.com/tools/dashboard/api-keys
 
 ## Usage
 
-The plugin adds a new task called `my-task`. To run it, use the this command:
-
+Audit all contracts:
 ```bash
-npx hardhat my-task
+npx hardhat blockhertz-audit
 ```
 
-You should see the following output:
-
-```
-Hello, Hardhat!
-```
-
-### Configuration
-
-You can configure the greeting that's printed by using the `myConfig` field in your Hardhat config. For example, you can have this config:
-
-```ts
-import { defineConfig } from "hardhat/config";
-import myPlugin from "hardhat-my-plugin";
-
-export default defineConfig({
-  plugins: [myPlugin],
-  myConfig: {
-    greeting: "Hola",
-  },
-  //...
-});
+Audit specific contract:
+```bash
+npx hardhat blockhertz-audit --contract contracts/Lock.sol
 ```
 
-### Network logs
+## Configuration
 
-This plugin also adds some example code to log different network events. To see it in action, all you need to do is run your Hardhat tests, deployment, or a script.
+| Option | Default | Description |
+|--------|---------|-------------|
+| apiKey | env BLOCKHERTZ_API_KEY | Your Blockhertz API key |
+| failOn | "high" | Minimum severity to fail build |
+| contractsPath | "./contracts" | Path to contracts directory |
+
+## failOn Options
+
+| Value | Description |
+|-------|-------------|
+| "critical" | Fail only on critical severity |
+| "high" | Fail on high + critical (default) |
+| "medium" | Fail on medium and above |
+| "none" | Never fail the build |
+
+## Links
+
+- [Get API Key](https://blockhertz.com/tools/dashboard/api-keys)
+- [Blockhertz](https://blockhertz.com)
+- [Issues](https://github.com/Blockhertz/hardhat-blockhertz/issues)

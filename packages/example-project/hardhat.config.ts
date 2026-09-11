@@ -1,10 +1,11 @@
 import { defineConfig } from "hardhat/config";
-import myPlugin from "hardhat-my-plugin";
+import hardhatBlockhertz from "hardhat-blockhertz";
 
 export default defineConfig({
-  plugins: [myPlugin],
+  plugins: [hardhatBlockhertz],
   solidity: "0.8.29",
-  myConfig: {
-    greeting: "Hola",
+  blockhertz: {
+    apiKey: process.env.BLOCKHERTZ_API_KEY ?? "",
+    failOn: "high",
   },
 });

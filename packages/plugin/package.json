@@ -1,19 +1,27 @@
 {
-  "name": "hardhat-my-plugin",
-  "version": "1.0.0",
-  "description": "Hardhat 3 plugin template",
+  "name": "hardhat-blockhertz",
+  "version": "0.1.0",
+  "description": "AI-powered smart contract auditor for Hardhat by Blockhertz",
   "license": "MIT",
+  "homepage": "https://blockhertz.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Blockhertz/hardhat-blockhertz"
+  },
+  "author": "Blockhertz <contact@blockhertz.com>",
   "type": "module",
   "types": "dist/src/index.d.ts",
   "exports": {
     ".": "./dist/src/index.js"
   },
   "keywords": [
-    "ethereum",
-    "smart-contracts",
     "hardhat",
-    "hardhat3",
-    "hardhat-plugin"
+    "hardhat-plugin",
+    "smart-contract",
+    "security",
+    "audit",
+    "solidity",
+    "blockhertz"
   ],
   "scripts": {
     "lint": "pnpm prettier --check && pnpm eslint",
