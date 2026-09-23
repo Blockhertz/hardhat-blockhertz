@@ -27,6 +27,31 @@ const SEVERITY_COLORS: Record<string, string> = {
 const RESET = "\x1b[0m";
 const BOLD = "\x1b[1m";
 
+const DEFAULT_API_URL = "https://blockhertz.com/api/v1/audit";
+
+interface ApiErrorBody {
+  error?: string;
+  detail?: string;
+  resetIn?: number;
+}
+
+function describeApiError(data: ApiErrorBody): string {
+  switch (data.error) {
+    case "contract_not_found":
+      return "Contract not found or not verified on the block explorer.";
+    case "invalid_api_key":
+      return "Invalid API key. Check blockhertz.apiKey or BLOCKHERTZ_API_KEY (get one at blockhertz.com/tools/dashboard/api-keys).";
+    case "rate_limit_exceeded":
+      return typeof data.resetIn === "number"
+        ? `Rate limit exceeded. Try again in ~${Math.ceil(data.resetIn / 60)} min.`
+        : "Rate limit exceeded. Try again later.";
+    case "insufficient_credits":
+      return "No credits remaining. Visit blockhertz.com/pricing";
+    default:
+      return data.error ?? "Unknown error";
+  }
+}
+
 function findSolFiles(dir: string, files: string[] = []): string[] {
   try {
     const entries = readdirSync(dir);
@@ -53,7 +78,8 @@ export default async function runAudit(
   const cfg = hre.config.blockhertz ?? ({} as any);
 
   const apiKey = cfg.apiKey || process.env.BLOCKHERTZ_API_KEY || "";
-  const apiUrl = "https://blockhertz.com/api/v1/audit";
+  const apiUrl =
+    cfg.apiUrl || process.env.BLOCKHERTZ_API_URL || DEFAULT_API_URL;
   const failOn = cfg.failOn ?? "high";
   const contractsDir = cfg.contractsPath || join(process.cwd(), "contracts");
 
@@ -82,6 +108,7 @@ export default async function runAudit(
 
   let hasBlockingIssues = false;
   let totalFindings = 0;
+  let failedAudits = 0;
 
   for (const filePath of contractFiles) {
     const code = readFileSync(filePath, "utf-8");
@@ -104,12 +131,11 @@ export default async function runAudit(
 
       const data = (await res.json()) as any;
 
-      if (!data.success) {
-        const msg =
-          data.error === "insufficient_credits"
-            ? "No credits remaining. Visit blockhertz.com/pricing"
-            : (data.error ?? "Unknown error");
-        console.log(`  \x1b[31m✗ ${msg}${RESET}`);
+      if (!res.ok || !data.success) {
+        failedAudits++;
+        console.log(
+          `  \x1b[31m✗ ${describeApiError(data as ApiErrorBody)}${RESET}\n`,
+        );
         continue;
       }
 
@@ -154,21 +180,33 @@ export default async function runAudit(
         console.log(`\n  ${BOLD}Summary:${RESET} ${data.summary}`);
       }
     } catch (err: any) {
-      console.log(`  \x1b[31m✗ Network error:${RESET} ${err.message}`);
+      failedAudits++;
+      console.log(`  \x1b[31m✗ Request failed:${RESET} ${err.message}`);
     }
     console.log("");
   }
 
   console.log("─".repeat(50));
   console.log(
-    `${BOLD}Audit complete:${RESET} ${contractFiles.length} contract(s), ${totalFindings} finding(s)`,
+    `${BOLD}Audit finished:${RESET} ${contractFiles.length - failedAudits} of ${contractFiles.length} contract(s) audited, ${totalFindings} finding(s)`,
   );
+
+  if (failedAudits > 0) {
+    console.log(
+      `\n${BOLD}\x1b[31m✗ Audit could not complete:${RESET} ${failedAudits} of ${contractFiles.length} contract(s) were not audited (see errors above).\n` +
+        `  This is a failed run, not a pass. Fix the error and re-run.\n`,
+    );
+  }
 
   if (hasBlockingIssues) {
     console.log(
       `\n${BOLD}\x1b[31m✗ Build failed:${RESET} Found ${failOn}+ severity issues.\n` +
         `  Fix issues or set blockhertz.failOn = 'none'\n`,
     );
+    process.exit(1);
+  }
+
+  if (failedAudits > 0) {
     process.exit(1);
   }
 

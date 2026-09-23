@@ -47,6 +47,7 @@ npx hardhat blockhertz-audit --contract contracts/Lock.sol
 | Option | Default | Description |
 |--------|---------|-------------|
 | apiKey | env BLOCKHERTZ_API_KEY | Your Blockhertz API key |
+| apiUrl | env BLOCKHERTZ_API_URL, else production | Audit endpoint (override for preview/staging) |
 | failOn | "high" | Minimum severity to fail build |
 | contractsPath | "./contracts" | Path to contracts directory |
 
