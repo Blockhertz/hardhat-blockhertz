@@ -5,6 +5,8 @@ declare module "hardhat/types/config" {
       apiUrl?: string;
       failOn?: "critical" | "high" | "medium" | "none";
       contractsPath?: string;
+      exclude?: string[];
+      skipBuiltInFilters?: boolean;
     };
   }
 
@@ -14,6 +16,8 @@ declare module "hardhat/types/config" {
       apiUrl: string;
       failOn: "critical" | "high" | "medium" | "none";
       contractsPath: string;
+      exclude: string[];
+      skipBuiltInFilters: boolean;
     };
   }
 }

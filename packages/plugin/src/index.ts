@@ -15,6 +15,12 @@ const plugin: HardhatPlugin = {
         type: ArgumentType.STRING,
         defaultValue: "",
       })
+      .addOption({
+        name: "yes",
+        description: "Skip the credit-usage confirmation prompt (required in non-interactive shells / CI)",
+        type: ArgumentType.BOOLEAN,
+        defaultValue: false,
+      })
       .setAction(() => import("./tasks/audit.js"))
       .build(),
   ],
