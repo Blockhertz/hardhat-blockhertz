@@ -15,7 +15,7 @@ Review your `failOn` threshold if you want to preserve prior behavior (e.g. set 
 
 ### Fixed
 
-- A failed audit no longer looks like a passed one. If any API call fails (invalid key, rate limit, no credits, contract not found, network error, any non-2xx response), the task now prints "Audit could not complete" and exits with code 1. Previously it printed the error, continued, and ended with "All checks passed" and exit code 0. This applies regardless of `failOn`, including `failOn: "none"`.
+- A failed audit no longer looks like a passed one. If any API call fails (invalid key, rate limit, no credits, contract not found, network error, unparseable response, any non-2xx response), the task now prints "Audit could not complete" and exits with code 1. Previously it printed the error, continued, and ended with "All checks passed" and exit code 0. This applies regardless of `failOn`, including `failOn: "none"`.
 
 ## 0.1.0
 

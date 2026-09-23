@@ -129,7 +129,16 @@ export default async function runAudit(
         }),
       });
 
-      const data = (await res.json()) as any;
+      let data: any;
+      try {
+        data = await res.json();
+      } catch {
+        failedAudits++;
+        console.log(
+          `  \x1b[31m✗ Server returned an unexpected response (${res.status}).${RESET}\n`,
+        );
+        continue;
+      }
 
       if (!res.ok || !data.success) {
         failedAudits++;
