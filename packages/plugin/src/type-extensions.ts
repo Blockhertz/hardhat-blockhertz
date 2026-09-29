@@ -1,23 +1,18 @@
+export interface BlockhertzUserConfig {
+  apiKey?: string;
+  apiUrl?: string;
+  failOn?: "critical" | "high" | "medium" | "none";
+  contractsPath?: string;
+  exclude?: string[];
+  skipBuiltInFilters?: boolean;
+}
+
 declare module "hardhat/types/config" {
   interface HardhatUserConfig {
-    blockhertz?: {
-      apiKey?: string;
-      apiUrl?: string;
-      failOn?: "critical" | "high" | "medium" | "none";
-      contractsPath?: string;
-      exclude?: string[];
-      skipBuiltInFilters?: boolean;
-    };
+    blockhertz?: BlockhertzUserConfig;
   }
 
   interface HardhatConfig {
-    blockhertz: {
-      apiKey: string;
-      apiUrl: string;
-      failOn: "critical" | "high" | "medium" | "none";
-      contractsPath: string;
-      exclude: string[];
-      skipBuiltInFilters: boolean;
-    };
+    blockhertz?: BlockhertzUserConfig;
   }
 }

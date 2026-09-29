@@ -6,7 +6,19 @@ import "./type-extensions.js";
 
 const plugin: HardhatPlugin = {
   id: "hardhat-blockhertz",
-  hookHandlers: {},
+  hookHandlers: {
+    config: async () => {
+      const { validatePluginConfig, resolvePluginConfig } = await import(
+        "./config.js"
+      );
+      return {
+        default: async () => ({
+          validateUserConfig: validatePluginConfig,
+          resolveUserConfig: resolvePluginConfig,
+        }),
+      };
+    },
+  },
   tasks: [
     task("blockhertz-audit", "Audit smart contracts using Blockhertz AI Security Scanner")
       .addOption({
