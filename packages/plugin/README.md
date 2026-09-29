@@ -2,7 +2,7 @@
 
 AI-powered smart contract security auditor for Hardhat — powered by [Blockhertz](https://blockhertz.com)
 
-[![npm](https://img.shields.io/npm/v/hardhat-blockhertz)](https://www.npmjs.com/package/hardhat-blockhertz) [![Hardhat Plugin](https://img.shields.io/badge/hardhat-plugin-yellow)](https://hardhat.org/plugins) [![Telegram Bot](https://img.shields.io/badge/Telegram-@BlockhertzBot-blue)](https://t.me/BlockhertzBot)
+[![npm](https://img.shields.io/npm/v/hardhat-blockhertz)](https://www.npmjs.com/package/hardhat-blockhertz) [![Hardhat Plugin](https://img.shields.io/badge/hardhat-plugin-yellow)](https://hardhat.org/plugins) [![Telegram Bot](https://img.shields.io/badge/Telegram-@blockhertz__audit__bot-blue)](https://t.me/blockhertz_audit_bot)
 
 ## Installation
 
@@ -14,7 +14,7 @@ npm install hardhat-blockhertz
 
 Don't have Hardhat set up yet? Get an instant security teaser for any deployed contract in seconds — no signup, no install.
 
-**[@BlockhertzBot](https://t.me/BlockhertzBot)** on Telegram
+**[@blockhertz_audit_bot](https://t.me/blockhertz_audit_bot)** on Telegram
 
 ```
 /audit 0xYourContractAddress
@@ -136,7 +136,7 @@ style), via [micromatch](https://www.npmjs.com/package/micromatch).
 ## Links
 
 - [Blockhertz AI Auditor](https://blockhertz.com/tools/ai-auditor) — full web-based audit tool
-- [@BlockhertzBot](https://t.me/BlockhertzBot) — Telegram bot for quick audits
+- [@blockhertz_audit_bot](https://t.me/blockhertz_audit_bot) — Telegram bot for quick audits
 - [npm package](https://www.npmjs.com/package/hardhat-blockhertz)
 - [GitHub](https://github.com/Blockhertz/hardhat-blockhertz)
 - [blockhertz.com](https://blockhertz.com)
