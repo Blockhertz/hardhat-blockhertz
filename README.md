@@ -1,81 +1,142 @@
-# Hardhat 3 plugin template
+# hardhat-blockhertz
 
-This repository is a template for creating a Hardhat 3 plugin.
+AI-powered smart contract security auditor for Hardhat — powered by [Blockhertz](https://blockhertz.com)
 
-## Getting started
+[![npm](https://img.shields.io/npm/v/hardhat-blockhertz)](https://www.npmjs.com/package/hardhat-blockhertz) [![Hardhat Plugin](https://img.shields.io/badge/hardhat-plugin-yellow)](https://hardhat.org/plugins) [![Telegram Bot](https://img.shields.io/badge/Telegram-@blockhertz__audit__bot-blue)](https://t.me/blockhertz_audit_bot)
 
-> This repository is structured as a pnpm monorepo, so make sure you have [`pnpm`](https://pnpm.io/) installed first
+## Installation
 
-To get started, clone the repository and run:
-
-```sh
-pnpm install
-pnpm build
+```bash
+npm install hardhat-blockhertz
 ```
 
-This will install all the dependencies and build the plugin.
+## 🤖 Quick Audit via Telegram
 
-You can now run the tests of the plugin with:
+Don't have Hardhat set up yet? Get an instant security teaser for any deployed contract in seconds — no signup, no install.
 
-```sh
-pnpm test
+**[@blockhertz_audit_bot](https://t.me/blockhertz_audit_bot)** on Telegram
+
+```
+/audit 0xYourContractAddress
+/audit 0xYourContractAddress base
 ```
 
-And try the plugin out in `packages/example-project` with:
+Supported chains: Ethereum, Base, Arbitrum, Optimism, Polygon, BNB Chain.
+Free tier: 2 audits per day. Full report with all findings and fix recommendations at [blockhertz.com/tools/ai-auditor](https://blockhertz.com/tools/ai-auditor).
 
-```sh
-cd packages/example-project
-pnpm hardhat my-task
+## Setup
+
+```typescript
+import hardhatBlockhertz from "hardhat-blockhertz";
+
+const config = {
+  plugins: [hardhatBlockhertz],
+  blockhertz: {
+    apiKey: process.env.BLOCKHERTZ_API_KEY,
+    failOn: "high",
+  }
+};
+
+export default config;
 ```
 
-which should print `Hola, Hardhat!`.
+## Get Free API Key
 
-## Understanding the repository structure
+https://blockhertz.com/tools/dashboard/api-keys
 
-### Monorepo structure
+## Usage
 
-This repository is structured as a pnpm monorepo with the following packages:
-
-- `packages/plugin`: The plugin itself.
-- `packages/example-project`: An example Hardhat 3 project that uses the plugin.
-
-All the development will happen in the `packages/plugin` directory, while `packages/example-project` is a playground to experiment with your plugin, and manually test it.
-
-### Plugin template structure
-
-The `packages/plugin` directory has a complete plugin example. It includes:
-
-- A `README.md` file that documents the plugin.
-- A `src/index.ts` file that defines and exports the plugin.
-- An example task, which is defined in `src/index.ts`, and whose action is in `src/tasks/my-task.ts`.
-- An example of how to extend the Hardhat config, which includes:
-  - The logic to extend the validation and resolution of the Hardhat config, in `src/config.ts`.
-  - The config Hook Handlers to inject that logic into Hardhat, in `src/hooks/config.ts`.
-  - The Type Extensions to add your config to `HardhatUserConfig` and `HardhatConfig`, in `src/type-extensions.ts`.
-- A network Hook Handler, which is in `src/hooks/network.ts`, which shows how to define them, and prints a few debug messages.
-- An example of how to test the config of your plugin, in `test/config.ts`.
-- An example of two different ways to test your plugin functionality, in `test/example-tests.ts`:
-  - Using a file-system based fixture project.
-  - Creating a new Hardhat Runtime Environment with an inline config.
-
-### Github Actions setup
-
-This repository is setup with a Github Actions workflow. You don't need to do anything to set it up, it runs on every push to `main`, on pull requests, and when manually triggered.
-
-The workflow is equivalent to running this steps in the root of the repository:
-
-```sh
-pnpm install
-pnpm build
-pnpm test
-pnpm lint
+Audit all contracts:
+```bash
+npx hardhat blockhertz-audit
 ```
 
-It runs using Node.js versions 22 and 24, on an `ubuntu-latest` runner.
+Audit specific contract:
+```bash
+npx hardhat blockhertz-audit --contract contracts/Lock.sol
+```
 
-## Development setup
+Skip the credit-usage prompt (required in CI):
+```bash
+npx hardhat blockhertz-audit --yes
+# or -y, or BLOCKHERTZ_YES=1 env var
+```
 
-- This repository includes a setup of typescript and eslint, based on the official recommendation of each project, and a a few custom rules that help building Hardhat plugins.
-- It also includes `prettier` to format the code, with its default configuration.
-- There are npm scripts in the root that should be enough to build, lint, test, etc.
-  - Running `pnpm watch` can be helpful when using the example project. If you keep a terminal running it, things will normally be rebuilt by the time you try them out in `packages/example-project`.
+## Credit usage & confirmation
+
+Each audited contract file consumes **one credit** from your Blockhertz
+account. Before running, the plugin prints how many files will be audited
+and prompts to confirm:
+
+```
+Found 6 contract file(s) to audit (2 excluded).
+  − contracts/interfaces/IERC20.sol (interface-only)
+  − contracts/mocks/MockOracle.sol (test/mock path)
+
+This will use up to 6 credit(s) from your Blockhertz account.
+Continue? (y/N)
+```
+
+Pass `--yes` (or `-y`, or `BLOCKHERTZ_YES=1`) to skip the prompt in CI.
+Non-interactive shells without `--yes` fail fast rather than hang.
+
+## Filtering
+
+By default the plugin excludes files that would waste credits:
+
+- Anything under a `node_modules/` path segment
+- Anything under a path segment named `test`, `tests`, `mock`, or `mocks`
+  (case-insensitive, segment-matched — `contracts/testing/Real.sol` is
+  **kept**; `contracts/test/Real.sol` is excluded)
+- Interface-only files (a file whose top-level declarations are
+  `interface X { … }` with no `contract` or `library`)
+
+Interface detection is a regex heuristic on the file contents, with
+comments stripped first. It gets the common cases right; if it misfires
+for you, set `skipBuiltInFilters: true` to force-include every file.
+
+### Custom excludes
+
+Add project-specific globs — these are **additive**, not a replacement
+for the built-in filters:
+
+```typescript
+blockhertz: {
+  apiKey: process.env.BLOCKHERTZ_API_KEY,
+  exclude: [
+    "contracts/legacy/**",
+    "contracts/scripts/**/*.sol",
+  ],
+}
+```
+
+Globs are matched against paths **relative to your project root** (POSIX
+style), via [micromatch](https://www.npmjs.com/package/micromatch).
+
+## Configuration
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| apiKey | env BLOCKHERTZ_API_KEY | Your Blockhertz API key |
+| apiUrl | env BLOCKHERTZ_API_URL, else production | Audit endpoint (override for preview/staging) |
+| failOn | "high" | Minimum severity to fail build |
+| contractsPath | "./contracts" | Path to contracts directory |
+| exclude | [] | Extra glob patterns (added to built-in filters) |
+| skipBuiltInFilters | false | Disable the built-in test/mock/interface filters (node_modules is always excluded) |
+
+## failOn Options
+
+| Value | Description |
+|-------|-------------|
+| "critical" | Fail only on critical severity |
+| "high" | Fail on high + critical (default) |
+| "medium" | Fail on medium and above |
+| "none" | Never fail the build |
+
+## Links
+
+- [Blockhertz AI Auditor](https://blockhertz.com/tools/ai-auditor) — full web-based audit tool
+- [@blockhertz_audit_bot](https://t.me/blockhertz_audit_bot) — Telegram bot for quick audits
+- [npm package](https://www.npmjs.com/package/hardhat-blockhertz)
+- [GitHub](https://github.com/Blockhertz/hardhat-blockhertz)
+- [blockhertz.com](https://blockhertz.com)
