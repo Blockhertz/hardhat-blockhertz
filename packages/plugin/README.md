@@ -4,6 +4,8 @@ AI-powered smart contract security auditor for Hardhat — powered by [Blockhert
 
 [![npm](https://img.shields.io/npm/v/hardhat-blockhertz)](https://www.npmjs.com/package/hardhat-blockhertz) [![Hardhat Plugin](https://img.shields.io/badge/hardhat-plugin-yellow)](https://hardhat.org/plugins) [![Telegram Bot](https://img.shields.io/badge/Telegram-@blockhertz__audit__bot-blue)](https://t.me/blockhertz_audit_bot)
 
+> ⚠️ **0.1.0 users:** upgrade to 0.3.0 for billing safety prompts and smarter file filtering — `npm install hardhat-blockhertz@latest`
+
 ## Installation
 
 ```bash
