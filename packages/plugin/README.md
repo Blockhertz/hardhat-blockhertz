@@ -44,6 +44,8 @@ export default config;
 
 ## Get Free API Key
 
+[Hardhat Plugin docs & API key →](https://blockhertz.com/tools/hardhat-plugin?utm_source=hardhat-plugins&utm_medium=readme)
+
 https://blockhertz.com/tools/dashboard/api-keys?utm_source=hardhat-plugins&utm_medium=readme
 
 ## Usage
