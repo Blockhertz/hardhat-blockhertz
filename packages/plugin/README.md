@@ -1,6 +1,6 @@
 # hardhat-blockhertz
 
-AI-powered smart contract security auditor for Hardhat — powered by [Blockhertz](https://blockhertz.com)
+AI-powered smart contract security auditor for Hardhat — powered by [Blockhertz](https://blockhertz.com?utm_source=hardhat-plugins&utm_medium=readme)
 
 [![npm](https://img.shields.io/npm/v/hardhat-blockhertz)](https://www.npmjs.com/package/hardhat-blockhertz) [![Hardhat Plugin](https://img.shields.io/badge/hardhat-plugin-yellow)](https://hardhat.org/plugins) [![Telegram Bot](https://img.shields.io/badge/Telegram-@blockhertz__audit__bot-blue)](https://t.me/blockhertz_audit_bot)
 
@@ -24,7 +24,7 @@ Don't have Hardhat set up yet? Get an instant security teaser for any deployed c
 ```
 
 Supported chains: Ethereum, Base, Arbitrum, Optimism, Polygon, BNB Chain.
-Free tier: 2 audits per day. Full report with all findings and fix recommendations at [blockhertz.com/tools/ai-auditor](https://blockhertz.com/tools/ai-auditor).
+Free tier: 2 audits per day. Full report with all findings and fix recommendations at [blockhertz.com/tools/ai-auditor](https://blockhertz.com/tools/ai-auditor?utm_source=hardhat-plugins&utm_medium=readme).
 
 ## Setup
 
@@ -44,7 +44,7 @@ export default config;
 
 ## Get Free API Key
 
-https://blockhertz.com/tools/dashboard/api-keys
+https://blockhertz.com/tools/dashboard/api-keys?utm_source=hardhat-plugins&utm_medium=readme
 
 ## Usage
 
@@ -137,8 +137,8 @@ style), via [micromatch](https://www.npmjs.com/package/micromatch).
 
 ## Links
 
-- [Blockhertz AI Auditor](https://blockhertz.com/tools/ai-auditor) — full web-based audit tool
+- [Blockhertz AI Auditor](https://blockhertz.com/tools/ai-auditor?utm_source=hardhat-plugins&utm_medium=readme) — full web-based audit tool
 - [@blockhertz_audit_bot](https://t.me/blockhertz_audit_bot) — Telegram bot for quick audits
 - [npm package](https://www.npmjs.com/package/hardhat-blockhertz)
 - [GitHub](https://github.com/Blockhertz/hardhat-blockhertz)
-- [blockhertz.com](https://blockhertz.com)
+- [blockhertz.com](https://blockhertz.com?utm_source=hardhat-plugins&utm_medium=readme)
